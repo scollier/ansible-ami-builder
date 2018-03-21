@@ -24,10 +24,14 @@ AAB builds AMIs in 4 steps
 
 1. First you need to clone this repository
 
-git clone https://github.com/scollier/ansible-ami-build.git
+```git clone https://github.com/scollier/ansible-ami-build.git```
 
 2. Put the AWS private key into your keyring.
 
-eval `ssh-agent` && ssh-add ./aws-private-key.pem && ssh-add -l
+```eval `ssh-agent` && ssh-add ./aws-private-key.pem && ssh-add -l```
 
-3. 
+3. Configure your `secrets.yml` file with your environment configuration and the profiles you want to use. There is an example in the root directory of this repository. The secrets file is properly commented to provide some guidance on what is required.
+
+4. Run AAB and create your AMI.
+
+```ansible-playbook -vvv -e @scollier_secrets-ami_build.yml ami_lab_launch.yml```
