@@ -11,6 +11,7 @@ AAB builds AMIs in 4 steps
 
 ## Prerequisites
 
+* Ansible >= 2.4
 * Configured AWS VPC, routes, security groups, private key
 * boto
 * AWS account with keys to make API calls
