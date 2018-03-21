@@ -1,7 +1,17 @@
 # Getting started with AAB
 
+## General Overview
+
+AAB builds AMIs in 4 steps
+
+* Provisions a instance on AWS using the RHEL base AMI ID that you specify.  Everything starts from there.
+* AAB then registers that instance with route53 so you can ssh into it via public hostname.
+* Next AAB configures the instance using playbooks that are called by roles that you specify. This is completely customizable.
+* Finally, AAB creates an AMI from that image that you can use for other projects
+
 ## Prerequisites
 
+* Configured AWS VPC, routes, security groups, private key
 * boto
 * AWS account with keys to make API calls
 * AWS private key to log into instances
@@ -10,13 +20,14 @@
 * secrets file to store keys, 
 * RHEL base AMI ID
 
-## Building an AMI wiht AAB
+## Building an AMI with AAB
 
 1. First you need to clone this repository
 
-```git clone https://github.com/scollier/ansible-ami-build.git```
+git clone https://github.com/scollier/ansible-ami-build.git
 
-2. 
+2. Put the AWS private key into your keyring.
 
+eval `ssh-agent` && ssh-add ./aws-private-key.pem && ssh-add -l
 
-
+3. 
