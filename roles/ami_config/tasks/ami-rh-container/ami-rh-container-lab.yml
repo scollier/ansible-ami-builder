@@ -229,7 +229,6 @@
   gather_facts: yes
   vars_files:
     - aws_vars.yml
-    - scollier_secrets-ami_build.yml
   local_action:
     module: ec2_ami
     aws_access_key: "{{ ec2_access_key }}"

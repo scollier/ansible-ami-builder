@@ -97,11 +97,6 @@
     enabled: yes
   become: true
 
-- name: unsubscribe the host from RH CDN so we don't consume all subscriptions
-  command: subscription-manager remove --all
-  ignore_errors: yes
-  become: true
-
 - debug:
     var: result.instances[0].instance_id
     verbosity: 2
@@ -111,7 +106,6 @@
   gather_facts: yes
   vars_files:
     - aws_vars.yml
-    - scollier_secrets-ami_build.yml
   local_action:
     module: ec2_ami
     aws_access_key: "{{ ec2_access_key }}"
