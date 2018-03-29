@@ -21,6 +21,11 @@
       vpc_subnet_id: "{{ aws_subnet_id }}"
       zone: "{{ aws_az_1 }}"
       assign_public_ip: yes
+      volumes:
+        - device_name: /dev/sda1
+          volume_type: gp2
+          volume_size: "{{ ami_root_disk_size }}"
+          delete_on_termination: true
       region: "{{ aws_region }}"
       state: present
     with_sequence: start={{ ami_count_start }} end={{ ami_count_end }}

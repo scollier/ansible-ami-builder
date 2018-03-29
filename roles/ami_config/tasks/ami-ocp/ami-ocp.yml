@@ -11,9 +11,10 @@
     subscription-manager repos
     --enable="rhel-7-server-rpms"
     --enable="rhel-7-server-extras-rpms"
-    --enable="rhel-7-server-ose-3.7-rpms"
+    --enable="rhel-7-server-ose-3.9-rpms"
     --enable="rhel-7-fast-datapath-rpms"
     --enable="rhel-ha-for-rhel-7-server-htb-rpms"
+    --enable="rhel-7-server-ansible-2.4-rpms"
   become: true
 
 - name: Install packages for the "{{ ami_config }}" AMI
@@ -34,7 +35,7 @@
     - psacct
     - atomic
     - atomic-openshift-utils
-    - docker-1.12.6
+    - docker-1.13.1
     - python-boto3
     - python-boto
   become: true
@@ -111,7 +112,7 @@
     aws_access_key: "{{ ec2_access_key }}"
     aws_secret_key: "{{ ec2_secret_key }}"
     instance_id: "{{ result.instances[0].instance_id }}"
-    name: "{{ ami_container }}"
+    name: "{{ ami_ocp }}"
     region: "{{ aws_region }}"
     wait: yes
   register: ami_id
