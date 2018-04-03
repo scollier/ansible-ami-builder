@@ -2,6 +2,7 @@
 - name: Create AWS instances for {{ ami_user}} to build out AMI.
   hosts: localhost
   gather_facts: no
+  strategy: debug
   vars_files:
     - aws_vars.yml
   tasks:

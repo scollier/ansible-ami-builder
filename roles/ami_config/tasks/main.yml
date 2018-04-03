@@ -5,7 +5,7 @@
 - include: ami-http/ami-http.yml
   when: ami_config == "http"
 
-- include: ami-tower/ami-tower.yml
+- import_tasks: ami-tower/ami-tower.yml
   when: ami_config == "tower"
 
 - include: ami-ami-rh-container/ami-rh-container-lab.yml
