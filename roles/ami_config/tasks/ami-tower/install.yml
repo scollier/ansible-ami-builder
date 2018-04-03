@@ -78,6 +78,7 @@
 
 - debug:
     var: "{{ item }}"
+    verbosity: 2
   with_items:
     - tower_username
     - tower_password

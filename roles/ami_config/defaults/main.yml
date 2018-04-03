@@ -6,8 +6,8 @@ tower_password: "{{ tower_password }}"
 tower_projects_root: "/var/lib/awx/projects"
 tower_user_add: true
 
-# Tower version
-tower_version: 2.3.0
+# Tower version (last successful version was 3.2.3)
+tower_version: 3.2.3
 
 # Tower setup archive
 tower_setup_archive: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
