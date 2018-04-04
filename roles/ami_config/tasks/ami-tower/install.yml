@@ -49,12 +49,12 @@
       "tag:Name": "{{ inventory_hostname }}"
   register: ec2_instances
 
-- debug:
-    var: ec2_instances.instances[0].instance_id
-    verbosity: 1
-
 - set_fact:
-    instance_id: ec2_instances.instances[0].instance_id
+    instance_id: "{{ ec2_instances.instances[0].instance_id }}"
+
+- debug:
+    var: instance_id
+    verbosity: 1
 
 - name: Download and extract tower.
   unarchive:
@@ -74,22 +74,8 @@
   command: sudo /home/ec2-user/ansible-tower-setup-{{ tower_version }}/setup.sh
   ignore_errors: yes
   become: true
-  when: ami_tower_install_skip | default(False) | bool == False
-
-- debug:
-    var: "{{ item }}"
-    verbosity: 2
-  with_items:
-    - tower_username
-    - tower_password
-
-- name: Set Tower 'admin' password to desired 'tower_password' value
-  expect:
-    command: tower-manage changepassword admin
-    responses: 
-      Password.*: "{{ tower_password }}"
-  become: true
-  no_log: True
+  tags:
+    - install
 
 - name: Post Tower license
   uri:

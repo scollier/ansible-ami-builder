@@ -1,7 +1,4 @@
 ---
-- name: Include the credentials playbook which adds the ssh key and aws creds to Tower.
-  import_tasks: credentials.yml
-
 - name: Create an AMI from the configured VM
   local_action:
     module: ec2_ami
