@@ -33,13 +33,6 @@
   with_items: "{{ tower_yum_packages }}"
   become: true
 
-- name: Pip install requirements for Tower CLI
-  pip:
-    name: "{{ item }}"
-    state: present
-  with_items: "{{ tower_pip_packages }}"
-  become: true
-
 - name: Capture the instance ID of this "{{ ami_config }}" so we can create an AMI later.
   ec2_instance_facts:
     aws_access_key: "{{ ec2_access_key }}"
@@ -56,7 +49,7 @@
     var: instance_id
     verbosity: 1
 
-- name: Download and extract tower.
+- name: Download and extract tower
   unarchive:
     src: "{{ tower_setup_archive }}"
     dest: /home/ec2-user
