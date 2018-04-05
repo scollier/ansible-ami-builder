@@ -8,6 +8,6 @@
 - import_tasks: ami-tower/ami-tower.yml
   when: ami_config == "tower"
 
-- include: ami-ami-rh-container/ami-rh-container-lab.yml
+- include: ami-rh-container/ami-rh-container-lab.yml
   when: ami_config == "rh-container-lab"
 ...
