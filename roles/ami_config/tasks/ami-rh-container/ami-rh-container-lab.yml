@@ -1,7 +1,7 @@
 ---
 # Test to create a ocp file
 
-- include: rh_subscription.yml
+- include: ../subscriptions/rh_subscription.yml
 
     #### TODO check out blocks.
 
