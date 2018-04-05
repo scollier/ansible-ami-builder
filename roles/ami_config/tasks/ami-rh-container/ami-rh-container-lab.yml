@@ -1,7 +1,7 @@
 ---
 # Test to create a ocp file
 
-- include: rh_subscription.yml
+- include: ../subscriptions/rh_subscription.yml
 
     #### TODO check out blocks.
 
@@ -201,6 +201,11 @@
 - name: Run the script and cache the images
   command: sudo /home/ec2-user/start-oc.sh
   become: true
+
+- name: Grab podman and builda repos
+  get_url: 
+    url: https://copr.fedorainfracloud.org/coprs/baude/Upstream_CRIO_Family/repo/epel-7/baude-Upstream_CRIO_Family-epel-7.repo
+    dest: /etc/yum.repos.d/builda.repo
 
 - name: Capture the instance ID of this "{{ ami_config }}" so we can attach a volume later
   hosts: localhost
