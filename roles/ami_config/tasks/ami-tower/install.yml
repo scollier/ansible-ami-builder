@@ -26,12 +26,19 @@
     state: present
   become: true
 
-- name: Install packages for the "{{ ami_config }}" AMI
+- name: Install yum packages for the "{{ ami_config }}" AMI
   yum:  
     name: "{{ item }}"
     state: present
   with_items: "{{ tower_yum_packages }}"
   become: true
+
+- name: Install pip packages for the "{{ ami_config }}" AMI
+  pip:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ tower_pip_packages }}"
 
 - name: Capture the instance ID of this "{{ ami_config }}" so we can create an AMI later.
   ec2_instance_facts:

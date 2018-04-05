@@ -25,4 +25,8 @@ tower_yum_packages:
   - python-boto3
   - python-boto
   - python2-pip
+
+# Tower pip packages
+tower_pip_packages:
+  - pexpect
 ...
