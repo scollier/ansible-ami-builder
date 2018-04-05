@@ -85,15 +85,16 @@
     body_format: json
 
 - name: See if the sudo escalation is already there
-  shell: grep "AWX_PROOT_ENABLED=False" /etc/tower/settings.py
+  command: grep "AWX_PROOT_ENABLED=False" /etc/tower/settings.py
   register: aws_enabled
+  ignore_errors: yes
 
 - name: Enable sudo escalation for Tower
   lineinfile:
     path: /etc/tower/settings.py
     line: "AWX_PROOT_ENABLED=False"
     backup: yes
-  when: aws_enabled.stdout != ""
+  when: aws_enabled.rc != 0
   become: true
 
 - name: Allow 'wheel' group to have passwordless sudo
