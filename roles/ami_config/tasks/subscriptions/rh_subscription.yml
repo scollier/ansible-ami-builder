@@ -13,7 +13,9 @@
   become: true
 
 - name: Disable RHUI and only use the Red Hat CDN for content
-  command: yum -y erase rh-amazon-rhui-client
+  command: yum -y erase "{{ item }}"
+  with_items:
+    - rh-amazon-rhui-client
   args:
     warn: no
   become: true

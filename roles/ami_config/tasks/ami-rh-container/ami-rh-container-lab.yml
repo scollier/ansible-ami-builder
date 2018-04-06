@@ -3,8 +3,6 @@
 
 - include: ../subscriptions/rh_subscription.yml
 
-    #### TODO check out blocks.
-
 - name: This creates a file on the "{{ ami_config }}" AMI so you can check later to see which plays were run.
   file:
     path: /tmp/ami-rh-container-lab
@@ -38,17 +36,11 @@
     - wget
     - git
     - net-tools
-    - bind-utils
-    - bash-completion
     - iptables-services
-    - sos
-    - psacct
     - docker-latest
-    - ansible
     - python-boto3
-    - firewalld
     - python-boto
-#    - "@Development tools"
+    - firewalld
     - atomic-openshift-clients
   become: true
 
@@ -223,11 +215,6 @@
 - debug:
     var: result.instances[0].instance_id
     verbosity: 2
-
-- name: unsubscribe the host from RH CDN so we don't consume all subscriptions
-  command: subscription-manager remove --all
-  ignore_errors: yes
-  become: true
 
 - name: Create an AMI from the configured VM
   hosts: localhost
