@@ -77,6 +77,18 @@
   tags:
     - install
 
+- name: "Wait for Tower to become available before proceeding (30 sec max)"
+  uri:
+    url: https://{{ inventory_hostname }}/api/v2/config/
+    method: GET
+    user: admin
+    password: "{{ tower_password }}"
+    validate_certs: no
+  register: status_output
+  until: status_output.status == 200
+  retries: 6
+  delay: 5
+
 - name: Post Tower license
   uri:
     url: https://{{ inventory_hostname }}/api/v2/config/
