@@ -140,5 +140,6 @@
         - ansible
         - python-boto3
         - python-boto
+        - tmux
       become: true
 ...
