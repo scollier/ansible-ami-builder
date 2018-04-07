@@ -141,5 +141,26 @@
         - python-boto3
         - python-boto
         - tmux
+        - screen
       become: true
+
+    - name: Copy git prompt
+      copy:
+        src: git_branch_prompt
+        dest: ~/.git_branch_prompt
+
+    - name: Read in {{ ansible_ssh_user }} bashrc file
+      slurp:
+        src: ~/.bashrc
+      register: bashrc_file
+
+    - debug:
+        var: bashrc_file
+        verbosity: 1
+
+    - name: Add git prompt to bashrc if not already there
+      lineinfile:
+        path: ~/.bashrc
+        line: "source ~/.git_branch_prompt"
+      when: not 'source ~/.git_branch_prompt' in bashrc_file.content
 ...
