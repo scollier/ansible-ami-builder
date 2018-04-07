@@ -25,6 +25,12 @@ tower_yum_packages:
   - python-boto3
   - python-boto
   - python2-pip
+  - pyOpenSSL
+  - python-netaddr
+  - python-six
+  - python-click
+  - python-httplib2
+  - python2-pip
 
 # Tower pip packages
 tower_pip_packages:
