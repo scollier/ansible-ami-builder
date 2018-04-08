@@ -1,6 +1,6 @@
 ---
 - name: Include ami_config role
-  hosts: ami_instances
+  hosts: instance
   #strategy: debug
   become: true
   gather_facts: yes

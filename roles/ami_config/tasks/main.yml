@@ -10,4 +10,7 @@
 
 - include: ami-rh-container/ami-rh-container-lab.yml
   when: ami_config == "rh-container-lab"
+
+- import_tasks: ansible_host/ansible_host.yml
+  when: ami_config == "ansible_host"
 ...

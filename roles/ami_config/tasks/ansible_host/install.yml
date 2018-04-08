@@ -1,0 +1,39 @@
+---
+- name: Subscribe to the proper repositories for {{ ami_config }}
+  command: >
+    subscription-manager repos
+    --enable="rhel-7-server-rpms"
+    --enable="rhel-7-server-optional-rpms"
+    --enable="rhel-7-server-extras-rpms"
+    --enable="rhel-ha-for-rhel-7-server-htb-rpms"
+  become: true
+
+#- name: update the system prior to doing any work
+#  yum:
+#    name: "*"
+#    state: latest
+#  become: true
+
+- name: Add EPEL repository
+  yum:
+    name: http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+  become: true
+
+- name: Install yum packages
+  yum:  
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - wget
+    - git
+    - net-tools
+    - bind-utils
+    - bash-completion
+    - ansible
+    - python-boto3
+    - python-boto
+    - tmux
+    - screen
+  become: true
+...

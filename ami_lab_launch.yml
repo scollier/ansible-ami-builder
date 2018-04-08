@@ -16,8 +16,9 @@
       image: "{{ rhel_ami_id }}"
       wait: yes
       instance_tags:
-        Name: "ami-{{ ami_user }}-{{ ami_unique_id }}.{{ domain_name }}"
+        Name: "ami-{{ ami_user }}-{{ ami_config }}-{{ ami_unique_id }}.{{ domain_name }}"
         ami_user: "{{ ami_user }}"
+        ami_config: "{{ ami_config }}"
         student_id: "{{ ami_user }}-ami"
       vpc_subnet_id: "{{ aws_subnet_id }}"
       zone: "{{ aws_az_1 }}"
@@ -29,36 +30,33 @@
           delete_on_termination: true
       region: "{{ aws_region }}"
       state: present
-    with_sequence: start={{ ami_count_start }} end={{ ami_count_end }}
-    register: instances_created
+    register: instance_created
 
   - debug:
-      var: instances_created
-      verbosity: 2
+      var: instance_created
+      verbosity: 1
 
   - name: Wait for ssh
     wait_for:
       port: 22
-      host: "{{ item.instances.0.public_ip }}"
+      host: "{{ instance_created.instances.0.public_ip }}"
       timeout: 1000
-    with_items: "{{ instances_created.results }}"
     ignore_errors: yes
 
   - add_host:
-      hostname: "{{ item.instances.0.tags.Name }}"
-      ansible_host: "{{ item.instances.0.public_ip }}"
-      public_dns_name: "{{ item.instances.0.public_dns_name }}"
-      public_ip: "{{ item.instances.0.public_ip }}"
-      groups: ami_instances
-      student_id: "{{ item.instances.0.tags.student_id }}"
-    with_items: "{{ instances_created.results }}"
+      hostname: "{{ instance_created.instances.0.tags.Name }}"
+      ansible_host: "{{ instance_created.instances.0.public_ip }}"
+      public_dns_name: "{{ instance_created.instances.0.public_dns_name }}"
+      public_ip: "{{ instance_created.instances.0.public_ip }}"
+      groups: instance
+      student_id: "{{ instance_created.instances.0.tags.student_id }}"
 
   - debug:
       var: groups
-      verbosity: 2
+      verbosity: 1
 
 - name: Create AWS route53 entries for Tower instances
-  hosts: ami_instances
+  hosts: instance
   gather_facts: no
   vars_files:
     - aws_vars.yml
@@ -68,7 +66,7 @@
   tasks:
     - debug:
         var: hostvars
-        verbosity: 2
+        verbosity: 1
 
     - name: Register route53 entries
       local_action:

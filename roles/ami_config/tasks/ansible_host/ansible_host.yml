@@ -1,0 +1,7 @@
+---
+- import_tasks: ../subscriptions/rh_subscription.yml
+
+- import_tasks: install.yml
+
+- import_tasks: configure.yml
+...
