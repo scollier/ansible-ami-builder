@@ -43,6 +43,7 @@
     - firewalld
     - atomic-openshift-clients
     - atomic
+    - docker
   become: true
 
 - name: Add the Docker group
