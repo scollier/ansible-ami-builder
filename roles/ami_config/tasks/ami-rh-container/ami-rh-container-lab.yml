@@ -42,6 +42,7 @@
     - python-boto
     - firewalld
     - atomic-openshift-clients
+    - atomic
   become: true
 
 - name: Add the Docker group
