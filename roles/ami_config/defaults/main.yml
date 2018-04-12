@@ -29,4 +29,12 @@ tower_yum_packages:
 # Tower pip packages
 tower_pip_packages:
   - pexpect
+
+# Local directory to clone git repos into
+repo_dir: ~/repos
+
+# Git repos to clone
+repos:
+  - https://github.com/scollier/ansible-ami-builder.git
+  - https://github.com/sabre1041/managing-ocp-install-beyond.git
 ...

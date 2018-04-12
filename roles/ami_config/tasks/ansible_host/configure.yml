@@ -18,4 +18,17 @@
     path: ~/.bashrc
     line: "source ~/.git_branch_prompt"
   when: not 'source ~/.git_branch_prompt' in bashrc_file.content
+
+- name: Ensure local working directory for git repos is present
+  file:
+    path: "{{ repo_dir }}"
+    state: directory
+
+- name: Clone git repos
+  git:
+    repo: "{{ item }}"
+    dest: "{{ repo_dir }}/{{ item.split('/')[-1].split('.git').0 }}"
+    clone: yes
+    update: yes
+  with_items: "{{ repos }}"
 ...
