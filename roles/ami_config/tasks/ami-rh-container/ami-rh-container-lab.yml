@@ -15,7 +15,6 @@
     --enable="rhel-7-server-optional-rpms"
     --enable="rhel-7-server-extras-rpms"
     --enable="rhel-7-server-ose-3.9-rpms"
-    --enable="rhel-ha-for-rhel-7-server-htb-rpms"
   become: true
 
 - name: Add EPEL repository
@@ -149,35 +148,28 @@
     reload: yes
   become: true
 
-- name: Create a directory to clone everything into
-  file:
-    path: /home/ec2-user/rh-container-lab
-    state: directory
-    
 - name: Clone the git repo
   git:
-    repo: 'https://github.com/tchughesiv/rh-container-lab'
-    dest: /home/ec2-user/rh-container-lab
-  become: true
+    repo: 'https://github.com/dustymabe/summit-2018-container-lab'
+    dest: /home/ec2-user/summit-2018-container-lab
 
 - name: Move the OC startup scripts to the home directory
   copy:
     src: "{{ item }}"
     dest: /home/ec2-user/
+    owner: ec2-user
+    group: ec2-user
+    mode: 0755
     remote_src: yes
   with_items:
-    - /home/ec2-user/rh-container-lab/scripts/host/start-oc.sh
-    - /home/ec2-user/rh-container-lab/scripts/host/cleanup-oc.sh
+    - /home/ec2-user/summit-2018-container-lab/scripts/host/start-oc.sh
+    - /home/ec2-user/summit-2018-container-lab/scripts/host/cleanup-oc.sh
   become: true
 
-- name: Change file permissions on script
+- name: Cleanup repo dir
   file:
-    path: "{{ item }}"
-    mode: 0755
-  with_items:
-    - /home/ec2-user/start-oc.sh
-    - /home/ec2-user/cleanup-oc.sh
-  become: true
+    path: /home/ec2-user/summit-2018-container-lab
+    state: absent
 
 - name: copy over the registries file
   copy:
@@ -193,13 +185,34 @@
   become: true
 
 - name: Run the script and cache the images
-  command: sudo /home/ec2-user/start-oc.sh
-  become: true
+  shell: /home/ec2-user/start-oc.sh
+  async: 600
+  poll: 0
+  register: start_oc
 
 - name: Grab podman and builda repos
   get_url: 
     url: https://copr.fedorainfracloud.org/coprs/baude/Upstream_CRIO_Family/repo/epel-7/baude-Upstream_CRIO_Family-epel-7.repo
     dest: /etc/yum.repos.d/builda.repo
+
+- name: Install podman packages for the "{{ ami_config }}" AMI
+  yum:  
+    name: "{{ item }}"
+    state: latest
+  with_items:
+    - podman
+    - buildah-0.16-git83d7d10.el7.centos
+  become: true
+
+- name: Check on image cache task
+  async_status: jid={{ start_oc.ansible_job_id }}
+  register: cache_result
+  until: cache_result.finished
+  retries: 300
+
+- name: Cleanup
+  shell: /home/ec2-user/cleanup-oc.sh
+  ignore_errors: True
 
 - name: Capture the instance ID of this "{{ ami_config }}" so we can attach a volume later
   hosts: localhost
@@ -236,4 +249,3 @@
 - debug:
     var: ami_id.image_id
     verbosity: 2
-
