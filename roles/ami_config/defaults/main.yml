@@ -41,7 +41,7 @@ tower_credential_machine: "SSH"
 tower_credential_machine_config: true
 tower_credential_machine_description: "Private SSH Key"
 tower_credential_machine_type: "Machine"
-tower_credential_machine_ssh_key_data_file: "specify_your_private_key_filename_here.pem"
+tower_credential_machine_ssh_key_data_file: "{{ tower_credential_machine_ssh_key_data_file }}"
 tower_credential_machine_username: "ec2-user"
 
 # Tower cloud credential
