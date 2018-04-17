@@ -4,7 +4,7 @@
     src: git_branch_prompt
     dest: ~/.git_branch_prompt
 
-- name: Read in {{ ansible_ssh_user }} bashrc file
+- name: Read in {{ ansible_user }} bashrc file
   slurp:
     src: ~/.bashrc
   register: bashrc_file
