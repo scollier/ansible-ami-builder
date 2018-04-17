@@ -1,0 +1,26 @@
+---
+- name: Remove Demo Tower Machine Credential
+  command: >
+    tower-cli credential delete
+    --name='{{ tower_credential_machine_demo }}'
+    --credential-type=Machine
+    {{ tower_cli_options }}
+
+- name: Remove Demo Tower Inventory
+  command: >
+    tower-cli inventory delete
+    --name='{{ tower_inventory_demo }}'
+    {{ tower_cli_options }}
+
+- name: Remove Demo Tower Job Template
+  command: >
+    tower-cli job_template delete
+    --name='{{ tower_job_template_demo }}'
+    {{ tower_cli_options }}
+
+- name: Remove Demo Tower Project
+  command: >
+    tower-cli project delete
+    --name='{{ tower_project_demo }}'
+    {{ tower_cli_options }}
+...
