@@ -1,4 +1,8 @@
 ---
+- import_tasks: cli_options.yml
+- import_tasks: demo_removal.yml
+- import_tasks: credentials.yml
+
 - name: Create an AMI from the configured VM
   local_action:
     module: ec2_ami
