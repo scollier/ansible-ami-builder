@@ -1,0 +1,36 @@
+---
+- name: Download and extract tower
+  unarchive:
+    src: "{{ tower_setup_archive }}"
+    dest: /home/ec2-user
+    remote_src: yes
+
+- name: Copy over the template for the Tower inventory
+  template:
+    src: tower_config_inventory.j2
+    dest: /home/ec2-user/ansible-tower-setup-{{ tower_version }}/inventory
+    backup: yes
+
+- name: Run the Tower setup
+# TODO look into async to watch process.  it won't output, but it can give process. must add another task to poll.
+#   reference the openshift-ansible playbooks for examples
+  command: /home/ec2-user/ansible-tower-setup-{{ tower_version }}/setup.sh
+  ignore_errors: yes
+  become: true
+  tags:
+    - install
+
+- name: Post Tower license
+  uri:
+    url: https://{{ inventory_hostname }}/api/v2/config/
+    method: POST
+    validate_certs: no
+    headers:
+      Content-Type: "application/json"
+      Accept: "application/json"
+    force_basic_auth: yes
+    user: "{{ tower_username }}"
+    password: "{{ tower_password }}"
+    body: '{{ lookup("file", tower_license) }}'
+    body_format: json
+...

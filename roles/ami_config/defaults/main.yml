@@ -1,5 +1,19 @@
 ---
+# General defaults
+ami_create: True
+
+# EPEL
+epel_setup: False
+epel_latest_package: "http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
+
+# All Repositories
+all_repos:
+  - rhel-7-server-rpms
+  - rhel-7-server-optional-rpms
+  - rhel-7-server-extras-rpms
+
 # All yum packages
+yum_update: True
 all_yum_packages:
   - wget
   - git
@@ -7,57 +21,6 @@ all_yum_packages:
   - bind-utils
   - bash-completion
 
-ansible_host_yum_packages:
-  - ansible
-  - python-boto3
-  - python-boto
-  - tmux
-  - screen
-
-# Tower general config
-tower_host: localhost
-tower_username: admin
-tower_password: "{{ tower_password }}"
-tower_cli_verbosity: "--verbose"
-tower_org: "Default"
-
-# Tower version (last successful version was 3.2.3)
-tower_version: 3.2.3
-
-# Tower setup archive
-tower_setup_archive: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
-
-# Tower yum packages
-tower_yum_packages:
-  - wget
-  - git
-  - net-tools
-  - bind-utils
-  - bash-completion
-  - iptables-services
-  - sos
-  - psacct
-  - python2-ansible-tower-cli
-  - ansible
-  - python-boto3
-  - python-boto
-  - python2-pip
-  - pyOpenSSL
-  - python-netaddr
-  - python-six
-  - python-click
-  - python-httplib2
-  - python2-pip
-
-# Tower pip packages
-tower_pip_packages:
-  - pexpect
-
-# Local directory to clone git repos into
-repo_dir: ~/repos
-
-# Git repos to clone
-repos:
-  - https://github.com/scollier/ansible-ami-builder.git
-  - https://github.com/sabre1041/managing-ocp-install-beyond.git
+# All pip packages Note that this will require the package 'python2-pip'
+all_pip_packages: []
 ...

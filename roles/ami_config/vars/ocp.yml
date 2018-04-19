@@ -1,0 +1,26 @@
+---
+yum_update: False
+epel_setup: False
+ami_create: True
+
+ocp_version: 3.9
+
+yum_repos:
+  - rhel-7-server-ose-{{ ocp_version }}-rpms
+  - rhel-7-fast-datapath-rpms
+  - rhel-7-server-ansible-2.4-rpms
+
+# Tower yum packages
+yum_packages:
+  - iptables-services
+  - bridge-utils
+  - kexec-tools
+  - sos
+  - psacct
+  - atomic
+  - atomic-openshift-utils
+  - docker-1.13.1
+
+# Tower pip packages
+pip_packages: []
+...

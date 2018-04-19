@@ -1,0 +1,29 @@
+---
+- name: See if the sudo escalation is already there
+  command: grep "AWX_PROOT_ENABLED=False" /etc/tower/settings.py
+  register: aws_enabled
+  ignore_errors: yes
+
+- name: Enable sudo escalation for Tower
+  lineinfile:
+    path: /etc/tower/settings.py
+    line: "AWX_PROOT_ENABLED=False"
+    backup: yes
+  when: aws_enabled.rc != 0
+
+- name: Allow 'wheel' group to have passwordless sudo
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%wheel'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: visudo -cf %s
+
+- name: Add sudoers users to wheel group
+  user:
+    name: "{{ item }}"
+    groups: wheel
+    append: yes
+  with_items:
+    - awx
+...

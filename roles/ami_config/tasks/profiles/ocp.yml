@@ -1,0 +1,40 @@
+---
+- name: Create and attach a volume to the AMI so the Docker storage can be setup
+  local_action:
+    module: ec2_vol
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    region: "{{ aws_region }}"
+    instance: "{{ result.instances[0].instance_id }}"
+    name: "{{ ocp_ami_vol_name }}-{{ ami_unique_id }}"
+    volume_size: 50
+    volume_type: gp2
+    device_name: /dev/sdb
+
+- name: Configure Docker storage file
+  blockinfile:
+    path: /etc/sysconfig/docker-storage-setup
+    block: |
+      DEVS=/dev/xvdb
+      VG=ocp-docker-vol
+      DATA_SIZE=95%VG
+  become: true
+
+- name: Run docker-storage-setup
+  command: docker-storage-setup
+  become: true
+
+- name: Grow lv to fill vg
+  lvol:
+    lv: root
+    vg: ocp-docker-vol
+    size: +100%FREE
+  when: ocp_docker_vol_grow | default(False) | bool == True
+
+- name: start and enable Docker
+  service:
+    name: docker
+    state: restarted
+    enabled: yes
+  become: true
+...

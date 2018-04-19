@@ -1,0 +1,24 @@
+---
+yum_update: False
+epel_setup: False
+ami_create: False
+
+yum_packages:
+  - ansible
+  - tmux
+  - screen
+  - pexpect
+
+yum_repos:
+  - rhel-7-server-ansible-2-rpms
+
+pip_packages: []
+
+# Local directory to clone git repos into
+git_repo_dir: ~/repos
+
+# Git repos to clone
+git_repos:
+  - https://github.com/scollier/ansible-ami-builder.git
+  - https://github.com/sabre1041/managing-ocp-install-beyond.git
+...

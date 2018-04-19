@@ -1,0 +1,18 @@
+---
+- import_tasks: ocp.yml
+  when: ami_config == "ocp"
+
+- import_tasks: http.yml
+  when: ami_config == "http"
+
+- import_tasks: tower/tower.yml
+  when: ami_config == "tower"
+
+- import_tasks: rh-container-lab.yml
+  when: ami_config == "rh-container-lab"
+
+- import_tasks: ansible_host.yml
+  become: yes
+  become_user: "{{ ansible_user }}"
+  when: ami_config == "ansible_host"
+...

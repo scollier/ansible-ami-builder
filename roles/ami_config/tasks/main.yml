@@ -1,16 +1,18 @@
 ---
-- include: ami-ocp/ami-ocp.yml
-  when: ami_config == "ocp"
+# Load vars for requested profile, which are needed in the following tasks
+- import_tasks: profiles/vars.yml
 
-- include: ami-http/ami-http.yml
-  when: ami_config == "http"
+# Every AMI will get the same subscription tasks
+- import_tasks: rh_subscription.yml
 
-- import_tasks: ami-tower/ami-tower.yml
-  when: ami_config == "tower"
+# This is a generic install which is driven by the profile vars
+- import_tasks: install.yml
+  become: True
 
-- include: ami-rh-container/ami-rh-container-lab.yml
-  when: ami_config == "rh-container-lab"
+# Call profle specific tasks
+- import_tasks: profiles/tasks.yml
 
-- import_tasks: ansible_host/ansible_host.yml
-  when: ami_config == "ansible_host"
+# Call create_ami if requested
+- import_tasks: create_ami.yml
+  when: ami_create | default(True) | bool == True
 ...
