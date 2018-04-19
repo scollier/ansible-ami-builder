@@ -1,0 +1,24 @@
+---
+- name: Subscribe to the proper repositories for {{ ami_config }}
+  command: subscription-manager repos --enable={{ ' --enable='.join(all_repos + ansible_host_repos) }}
+  become: true
+
+#- name: update the system prior to doing any work
+#  yum:
+#    name: "*"
+#    state: latest
+#  become: true
+
+- name: Add EPEL repository
+  yum:
+    name: http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    state: present
+  become: true
+
+- name: Install yum packages
+  yum:  
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ all_yum_packages + ansible_host_yum_packages }}"
+  become: true
+...

@@ -1,0 +1,34 @@
+---
+- name: Copy git prompt
+  copy:
+    src: git_branch_prompt
+    dest: ~/.git_branch_prompt
+
+- name: Read in {{ ansible_user }} bashrc file
+  slurp:
+    src: ~/.bashrc
+  register: bashrc_file
+
+- debug:
+    var: bashrc_file
+    verbosity: 1
+
+- name: Add git prompt to bashrc if not already there
+  lineinfile:
+    path: ~/.bashrc
+    line: "source ~/.git_branch_prompt"
+  when: not 'source ~/.git_branch_prompt' in bashrc_file.content
+
+- name: Ensure local working directory for git repos is present
+  file:
+    path: "{{ repo_dir }}"
+    state: directory
+
+- name: Clone git repos
+  git:
+    repo: "{{ item }}"
+    dest: "{{ repo_dir }}/{{ item.split('/')[-1].split('.git').0 }}"
+    clone: yes
+    update: yes
+  with_items: "{{ repos }}"
+...

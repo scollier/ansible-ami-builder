@@ -1,11 +1,11 @@
 ---
 - name: Include ami_config role
-  hosts: ami_instances
+  hosts: instance
   #strategy: debug
   become: true
   gather_facts: yes
   vars:
-    - ansible_ssh_user: ec2-user
+    - ansible_user: ec2-user
   vars_files:
     - aws_vars.yml
   roles:

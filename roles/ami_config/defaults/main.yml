@@ -1,4 +1,13 @@
 ---
+# All Repositories
+all_repos:
+  - rhel-7-server-rpms
+  - rhel-7-server-optional-rpms
+  - rhel-7-server-extras-rpms
+
+ansible_host_repos:
+  - rhel-7-server-ansible-2-rpms
+
 # Tower general config
 tower_host: localhost
 tower_username: admin
@@ -11,6 +20,21 @@ tower_version: 3.2.3
 
 # Tower setup archive
 tower_setup_archive: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
+
+# All yum packages
+all_yum_packages:
+  - wget
+  - git
+  - net-tools
+  - bind-utils
+  - bash-completion
+
+ansible_host_yum_packages:
+  - ansible
+  - python-boto3
+  - python-boto
+  - tmux
+  - screen
 
 # Tower yum packages
 tower_yum_packages:
@@ -37,6 +61,14 @@ tower_yum_packages:
 # Tower pip packages
 tower_pip_packages:
   - pexpect
+
+# Local directory to clone git repos into
+repo_dir: ~/repos
+
+# Git repos to clone
+repos:
+  - https://github.com/scollier/ansible-ami-builder.git
+  - https://github.com/sabre1041/managing-ocp-install-beyond.git
 
 # Tower machine credential
 tower_credential_machine: "SSH"
