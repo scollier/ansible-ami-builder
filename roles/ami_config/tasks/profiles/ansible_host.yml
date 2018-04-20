@@ -21,14 +21,14 @@
 
 - name: Ensure local working directory for git repos is present
   file:
-    path: "{{ repo_dir }}"
+    path: "{{ git_repo_dir }}"
     state: directory
 
 - name: Clone git repos
   git:
     repo: "{{ item }}"
-    dest: "{{ repo_dir }}/{{ item.split('/')[-1].split('.git').0 }}"
+    dest: "{{ git_repo_dir }}/{{ item.split('/')[-1].split('.git').0 }}"
     clone: yes
     update: yes
-  with_items: "{{ repos }}"
+  with_items: "{{ git_repos }}"
 ...

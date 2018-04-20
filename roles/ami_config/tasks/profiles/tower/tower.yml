@@ -1,0 +1,15 @@
+---
+- import_tasks: setup.yml
+
+- import_tasks: configure.yml
+  become: true
+
+- import_tasks: cli_options.yml
+
+- import_tasks: demo_removal.yml
+
+- import_tasks: credentials.yml
+  when:
+    - tower_credential_cloud_config | default(True) | bool == True
+    - tower_credential_machine_config | default(True) | bool == True
+...

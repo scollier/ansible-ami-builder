@@ -1,50 +1,4 @@
 ---
-# Test to create a ocp file
-
-- include: ../subscriptions/rh_subscription.yml
-
-- name: This creates a file on the "{{ ami_config }}" AMI so you can check later to see which plays were run.
-  file:
-    path: /tmp/ami-rh-container-lab
-    state: touch
-
-- name: Subscribe to the proper "{{ ami_config }}" repositories
-  shell: >
-    subscription-manager repos
-    --enable="rhel-7-server-rpms"
-    --enable="rhel-7-server-optional-rpms"
-    --enable="rhel-7-server-extras-rpms"
-    --enable="rhel-7-server-ose-3.9-rpms"
-  become: true
-
-- name: Add EPEL repository
-  command: yum -y install http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
-  become: true
-
-- name: update the system prior to doing any work
-  yum:
-    name: "*"
-    state: latest
-  become: true
-
-- name: Install packages for the "{{ ami_config }}" AMI
-  yum:  
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - wget
-    - git
-    - net-tools
-    - iptables-services
-    - docker-latest
-    - python-boto3
-    - python-boto
-    - firewalld
-    - atomic-openshift-clients
-    - atomic
-    - docker
-  become: true
-
 - name: Add the Docker group
   group:
     name: docker
@@ -148,6 +102,11 @@
     reload: yes
   become: true
 
+- name: Create a directory to clone everything into
+  file:
+    path: /home/ec2-user/rh-container-lab
+    state: directory
+
 - name: Clone the git repo
   git:
     repo: 'https://github.com/dustymabe/summit-2018-container-lab'
@@ -176,7 +135,7 @@
     src: registries.conf
     dest: /etc/containers/registries.conf
   become: true
-  
+
 - name: Restart Docker
   service:
     name: docker-latest
@@ -191,61 +150,7 @@
   register: start_oc
 
 - name: Grab podman and builda repos
-  get_url: 
-    url: https://copr.fedorainfracloud.org/coprs/baude/Upstream_CRIO_Family/repo/epel-7/baude-Upstream_CRIO_Family-epel-7.repo
+  get_url:
+    url: "{{ repo_crio }}"
     dest: /etc/yum.repos.d/builda.repo
-
-- name: Install podman packages for the "{{ ami_config }}" AMI
-  yum:  
-    name: "{{ item }}"
-    state: latest
-  with_items:
-    - podman
-    - buildah-0.16-git83d7d10.el7.centos
-  become: true
-
-- name: Check on image cache task
-  async_status: jid={{ start_oc.ansible_job_id }}
-  register: cache_result
-  until: cache_result.finished
-  retries: 300
-
-- name: Cleanup
-  shell: /home/ec2-user/cleanup-oc.sh
-  ignore_errors: True
-
-- name: Capture the instance ID of this "{{ ami_config }}" so we can attach a volume later
-  hosts: localhost
-  gather_facts: no
-  vars_files:
-    - aws_vars.yml
-  ec2_instance_facts:
-    aws_access_key: "{{ ec2_access_key }}"
-    aws_secret_key: "{{ ec2_secret_key }}"
-    region: "{{ aws_region }}"
-    filters:
-      "tag:Name": "ami-{{ ami_user }}-{{ ami_unique_id }}.{{ domain_name }}"
-  register: result
-
-- debug:
-    var: result.instances[0].instance_id
-    verbosity: 2
-
-- name: Create an AMI from the configured VM
-  hosts: localhost
-  gather_facts: yes
-  vars_files:
-    - aws_vars.yml
-  local_action:
-    module: ec2_ami
-    aws_access_key: "{{ ec2_access_key }}"
-    aws_secret_key: "{{ ec2_secret_key }}"
-    instance_id: "{{ result.instances[0].instance_id }}"
-    name: "{{ ami_container }}"
-    region: "{{ aws_region }}"
-    wait: yes
-  register: ami_id
-
-- debug:
-    var: ami_id.image_id
-    verbosity: 2
+...

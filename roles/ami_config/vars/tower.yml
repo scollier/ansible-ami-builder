@@ -1,0 +1,65 @@
+---
+yum_update: False
+epel_setup: True
+ami_create: True
+
+# Tower general config
+tower_host: localhost
+tower_username: admin
+tower_password: "{{ tower_password }}"
+tower_cli_verbosity: "--verbose"
+tower_org: "Default"
+
+# Tower version (last successful version was 3.2.3)
+tower_version: 3.2.3
+ocp_version: 3.9
+
+# Tower setup archive
+tower_setup_archive: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
+
+yum_repos:
+  - rhel-7-server-ose-{{ ocp_version }}-rpms
+
+# Tower yum packages
+yum_packages:
+  - iptables-services
+  - sos
+  - psacct
+  - python2-ansible-tower-cli
+  - ansible
+  - pexpect
+  - pyOpenSSL
+  - python-netaddr
+  - python-six
+  - python-click
+  - python-httplib2
+
+# Tower pip packages
+pip_packages: []
+
+# Tower Organization
+tower_org: "Default"
+
+# Tower machine credential
+tower_credential_machine: "SSH"
+tower_credential_machine_config: True
+tower_credential_machine_description: "Private SSH Key"
+tower_credential_machine_type: "Machine"
+# The following should be a private SSH key in the same local directory that the playbook is run. A future refactor should allow absolute filenames instead. Specify this value in your secrets file.
+tower_credential_machine_ssh_key_data_file: "{{ tower_credential_machine_ssh_key_data_file }}"
+tower_credential_machine_username: "ec2-user"
+
+# Tower cloud credential
+tower_credential_cloud: "AWS"
+tower_credential_cloud_config: True
+tower_credential_cloud_description: "AWS Access and Secret"
+tower_credential_cloud_type: "Amazon Web Services"
+tower_credential_cloud_username: "{{ tower_ec2_access_key }}"
+tower_credential_cloud_password: "{{ tower_ec2_secret_key }}"
+
+# Tower demo objects
+tower_credential_machine_demo: "Demo Credential"
+tower_inventory_demo: "Demo Inventory"
+tower_job_template_demo: "Demo Job Template"
+tower_project_demo: "Demo Project"
+...

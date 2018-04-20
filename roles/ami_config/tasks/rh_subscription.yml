@@ -1,15 +1,10 @@
 ---
-# Subscribe the AMIs to RH
-
-- name: Register as user
+- name: Register to Red Hat CDN
   redhat_subscription:
     state: present
     username: "{{ rhn_username }}"
     password: "{{ rhn_password }}"
     pool_ids: "{{ rhn_pool_ids }}"
-    #pool_ids:
-    #  - "{{ rhn_pool_id_1 }}"
-    #  - "{{ rhn_pool_id_2 }}"
   become: true
 
 - name: Disable RHUI and only use the Red Hat CDN for content

@@ -1,0 +1,32 @@
+---
+- name: Subscribe to the proper repositories for "{{ ami_config }}"
+  command: subscription-manager repos --enable={{ ' --enable='.join(all_repos + yum_repos) }}
+
+- name: update the system prior to doing any work
+  yum:
+    name: "*"
+    state: latest
+  when: yum_update | default(True) | bool == True
+
+- name: Add EPEL repository for "{{ ami_config }}"
+  yum:
+    name: "{{ epel_latest_package }}"
+    state: present
+  when: epel_setup | default(False) | bool == True
+
+- name: Install yum packages for "{{ ami_config }}"
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ all_yum_packages + yum_packages }}"
+  become: true
+  when: all_yum_packages + yum_packages != []
+
+- name: Install pip packages for "{{ ami_config }}"
+  pip:
+    name: "{{ item }}"
+    state: present
+  become: true
+  with_items: "{{ all_pip_packages + pip_packages }}"
+  when: all_pip_packages + pip_packages != []
+...

@@ -1,0 +1,43 @@
+---
+- name: Create a file on the "{{ ami_config }}" AMI for later inspection
+  file:
+    path: /tmp/{{ ami_config }}-profile-configured-by-ansible-ami-builder
+    state: touch
+
+- name: Capture the instance ID of this "{{ ami_config }}"
+  local_action:
+    module: ec2_instance_facts
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    region: "{{ aws_region }}"
+    filters:
+      "tag:Name": "{{ inventory_hostname }}"
+  register: ec2_instances
+
+- set_fact:
+    instance_id: "{{ ec2_instances.instances[0].instance_id }}"
+
+- debug:
+    var: instance_id
+    verbosity: 1
+
+- name: Unsubscribe from CDN to release subscriptions
+  command: subscription-manager remove --all
+  ignore_errors: yes
+  become: True
+  when: subscription_manager_unregister | default(False) | bool == True
+
+- name: Create an AMI from the "{{ ami_config }}" VM
+  local_action:
+    module: ec2_ami
+    aws_access_key: "{{ ec2_access_key }}"
+    aws_secret_key: "{{ ec2_secret_key }}"
+    instance_id: "{{ instance_id }}"
+    name: "{{ ami_tower }}"
+    region: "{{ aws_region }}"
+    wait: yes
+  register: ami_id
+
+- debug:
+    var: ami_id.image_id
+...
