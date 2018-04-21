@@ -8,7 +8,6 @@ ocp_version: 3.9
 yum_repos:
   - rhel-7-server-ose-{{ ocp_version }}-rpms
 
-# Tower yum packages
 yum_packages:
   - iptables-services
   - sos
@@ -17,8 +16,9 @@ yum_packages:
   - ansible
   - firewalld
   - atomic-openshift-clients
+  - vim-enhanced
+  - tmux
 
-# Tower pip packages
 pip_packages: []
 
 repo_crio: "https://copr.fedorainfracloud.org/coprs/baude/Upstream_CRIO_Family/repo/epel-7/baude-Upstream_CRIO_Family-epel-7.repo"
