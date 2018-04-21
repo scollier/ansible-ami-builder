@@ -104,7 +104,7 @@
 
 - name: Create a directory to clone everything into
   file:
-    path: /home/ec2-user/rh-container-lab
+    path: /home/ec2-user/summit-2018-container-lab
     state: directory
 
 - name: Clone the git repo
@@ -124,11 +124,6 @@
     - /home/ec2-user/summit-2018-container-lab/scripts/host/start-oc.sh
     - /home/ec2-user/summit-2018-container-lab/scripts/host/cleanup-oc.sh
   become: true
-
-- name: Cleanup repo dir
-  file:
-    path: /home/ec2-user/summit-2018-container-lab
-    state: absent
 
 - name: copy over the registries file
   copy:
@@ -153,4 +148,12 @@
   get_url:
     url: "{{ repo_crio }}"
     dest: /etc/yum.repos.d/builda.repo
+
+- name: Install podman and buildah
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: 
+    - podman-0.4.4-git9b457e3.el7.centos
+    - buildah-0.16-gitb20e423.el7.centos
 ...
