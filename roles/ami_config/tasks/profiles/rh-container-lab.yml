@@ -155,5 +155,5 @@
     state: present
   with_items: 
     - podman-0.4.4-git9b457e3.el7.centos
-    - buildah-0.16-gitb20e423.el7.centos
+    - buildah-0.16-git83d7d10.el7.centos
 ...
