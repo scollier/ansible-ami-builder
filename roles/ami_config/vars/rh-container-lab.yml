@@ -12,9 +12,10 @@ yum_packages:
   - iptables-services
   - sos
   - psacct
-  - docker-latest
+#  - docker-latest
+  - docker
   - ansible
-  - firewalld
+#  - firewalld
   - atomic-openshift-clients
   - vim-enhanced
   - tmux
