@@ -102,27 +102,16 @@
     reload: yes
   become: true
 
-- name: Create a directory to clone everything into
-  file:
-    path: /home/ec2-user/summit-2018-container-lab
-    state: directory
-
-- name: Clone the git repo
-  git:
-    repo: 'https://github.com/dustymabe/summit-2018-container-lab'
-    dest: /home/ec2-user/summit-2018-container-lab
-
-- name: Move the OC startup scripts to the home directory
-  copy:
-    src: "{{ item }}"
-    dest: /home/ec2-user/
+- name: Download OC startup scripts
+  get_url:
+    url: "https://raw.githubusercontent.com/dustymabe/summit-2018-container-lab/master/scripts/host/{{ item }}"
+    dest: "/home/ec2-user/{{ item }}"
     owner: ec2-user
     group: ec2-user
     mode: 0755
-    remote_src: yes
   with_items:
-    - /home/ec2-user/summit-2018-container-lab/scripts/host/start-oc.sh
-    - /home/ec2-user/summit-2018-container-lab/scripts/host/cleanup-oc.sh
+    - start-oc.sh
+    - cleanup-oc.sh
   become: true
 
 - name: copy over the registries file
@@ -138,7 +127,7 @@
     enabled: yes
   become: true
 
-- name: Run the script and cache the images
+- name: Run the script and cache the OCP images
   shell: /home/ec2-user/start-oc.sh
   async: 600
   poll: 0
@@ -148,12 +137,31 @@
   get_url:
     url: "{{ repo_crio }}"
     dest: /etc/yum.repos.d/builda.repo
+  become: true
 
 - name: Install podman and buildah
   yum:
     name: "{{ item }}"
     state: present
-  with_items: 
+  with_items:
     - podman-0.4.4-git9b457e3.el7.centos
     - buildah-0.16-git83d7d10.el7.centos
+  become: true
+
+- name: Cache rhel7:7.5-231 image w/ podman
+  command: "{{ item }}"
+  with_items:
+    - podman pull registry.access.redhat.com/rhel7:7.5-231
+    - podman tag registry.access.redhat.com/rhel7:7.5-231 registry.access.redhat.com/rhel7:latest
+  become: true
+
+- name: Check on OCP image cache task
+  async_status: jid={{ start_oc.ansible_job_id }}
+  register: cache_result
+  until: cache_result.finished
+  retries: 300
+
+- name: Cleanup
+  shell: /home/ec2-user/cleanup-oc.sh
+  ignore_errors: True
 ...
