@@ -11,4 +11,3 @@
   roles:
     - { role: ami_config, when: ami_config is defined }
 ...
-
