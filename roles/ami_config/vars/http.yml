@@ -1,0 +1,22 @@
+---
+yum_update: False
+epel_setup: False
+ami_create: True
+disable_rhui: False
+
+yum_repos:
+  - rh-gluster-3-for-rhel-7-server-rpms 
+
+# Tower yum packages
+yum_packages:
+  - iptables-services
+  - bridge-utils
+  - kexec-tools
+  - sos
+  - vim
+  - httpd
+  - python2-passlib
+
+# Tower pip packages
+pip_packages: []
+...

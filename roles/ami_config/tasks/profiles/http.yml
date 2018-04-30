@@ -4,7 +4,34 @@
     path: /tmp/ami-http-test-file
     state: touch
 
-- name: unsubscribe the host from RH CDN so we don't consume all subscriptions
-  command: subscription-manager remove --all
+- name: set password
+  htpasswd:
+    path: /etc/httpd/.htpasswd
+    name: student
+    password: "{{ tower_password }}"
+    owner: root
+    group: root
+    mode: 0644
+
+- name: copy over httpd.conf file
+  synchronize:
+    src: files/httpd.conf
+    dest: /etc/httpd/conf/httpd.conf
+
+- name: create directory for password auth file
+  file:
+    path: /var/www/html/summit/
+    state: directory
+
+- name: copy over password auth file
+  synchronize:
+    src: files/htpasswd_auth
+    dest: /var/www/html/summit/.htaccess 
+
+- name: Restart httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
   become: true
 ...

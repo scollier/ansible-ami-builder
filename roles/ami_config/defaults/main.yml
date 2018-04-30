@@ -1,6 +1,7 @@
 ---
 # General defaults
 ami_create: True
+disable_rhui: True
 
 # EPEL
 epel_setup: False
@@ -20,6 +21,7 @@ all_yum_packages:
   - net-tools
   - bind-utils
   - bash-completion
+  - vim
 
 # All pip packages Note that this will require the package 'python2-pip'
 all_pip_packages: []
