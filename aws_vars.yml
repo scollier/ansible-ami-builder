@@ -1,15 +1,6 @@
 ---
-## Count of Tower instances to instantiate
-ami_count: 1
-# These are normally set to start at 1 and end at {{ student_count }} but can be customized as needed
-ami_count_start: 1
-ami_count_end: "{{ ami_count }}"
-
 # Default names of the AMIs that we create
-ami_ocp: ami_ocp-{{ ami_unique_id }}
-ami_tower: ami_tower-{{ ami_unique_id }}
-ami_http: ami_http-{{ ami_unique_id }}
-ami_container: ami_rh-container-{{ ami_unique_id }}
+ami_name: "{{ ami_config + '-' + ami_unique_id }}"
 
 # Set the default AMI root disk size
 ami_root_disk_size: 25
