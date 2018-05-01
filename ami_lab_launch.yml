@@ -5,6 +5,11 @@
   strategy: debug
   vars_files:
     - aws_vars.yml
+  pre_tasks:
+  - name: Check if 'ami_config' is defined
+    fail:
+      msg: "ERROR! The variable 'ami_config' must be defined!"
+    when: not ami_config is defined
   tasks:
   - name: Provision AMI instance on AWS for "{{ ami_config }}"
     ec2:
@@ -16,7 +21,7 @@
       image: "{{ rhel_ami_id }}"
       wait: yes
       instance_tags:
-        Name: "ami-{{ ami_user }}-{{ ami_config }}-{{ ami_unique_id }}.{{ domain_name }}"
+        Name: "ami-{{ ami_user }}-{{ ami_name }}.{{ domain_name }}"
         ami_user: "{{ ami_user }}"
         ami_config: "{{ ami_config }}"
         student_id: "{{ ami_user }}-ami"
