@@ -2,6 +2,7 @@
 yum_update: True
 epel_setup: True
 ami_create: True
+disable_rhui: True
 
 ocp_version: 3.9
 

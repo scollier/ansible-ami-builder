@@ -13,6 +13,7 @@
     - rh-amazon-rhui-client
   args:
     warn: no
+  when: disable_rhui == "True"
   become: true
 
 - name: Disable all repos on the system

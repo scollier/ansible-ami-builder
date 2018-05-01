@@ -2,6 +2,7 @@
 yum_update: False
 epel_setup: True
 ami_create: True
+disable_rhui: True
 
 # Tower general config
 tower_host: localhost
