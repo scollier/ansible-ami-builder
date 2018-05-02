@@ -9,9 +9,10 @@ yum_packages:
   - tmux
   - screen
   - pexpect
+  - python-boto
 
 yum_repos:
-  - rhel-7-server-ansible-2-rpms
+  - rhel-7-server-ansible-{{ ansible_rpm_version }}-rpms
 
 pip_packages: []
 

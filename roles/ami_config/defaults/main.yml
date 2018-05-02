@@ -3,6 +3,11 @@
 ami_create: True
 disable_rhui: True
 
+# Versions - these are the defaults, see individual profile variables if they need to be different
+ocp_version: 3.9
+# Ansible variable for version cannot use 'ansible_version' as this conflicts with one of Ansible's core variables
+ansible_rpm_version: 2.5
+
 # EPEL
 epel_setup: False
 epel_latest_package: "http://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm"
@@ -12,6 +17,7 @@ all_repos:
   - rhel-7-server-rpms
   - rhel-7-server-optional-rpms
   - rhel-7-server-extras-rpms
+  - rhel-7-server-rh-common-rpms
 
 # All yum packages
 yum_update: True
