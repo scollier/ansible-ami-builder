@@ -28,15 +28,17 @@ yum_packages:
   - psacct
   - python2-ansible-tower-cli
   - ansible
-  - pexpect
   - pyOpenSSL
   - python-netaddr
   - python-six
   - python-click
   - python-httplib2
+  - openshift-ansible-playbooks
+  - python2-pip
 
 # Tower pip packages
-pip_packages: []
+pip_packages:
+  - pexpect
 
 # Tower Organization
 tower_org: "Default"
