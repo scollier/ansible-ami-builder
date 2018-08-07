@@ -4,14 +4,15 @@ epel_setup: False
 ami_create: True
 disable_rhui: True
 
-ocp_version: 3.9
+ocp_version: 3.10
 
 yum_repos:
   - rhel-7-server-ose-{{ ocp_version }}-rpms
   - rhel-7-fast-datapath-rpms
   - rhel-7-server-ansible-2.4-rpms
 
-# Tower yum packages
+# yum packages
+## NOTE: For version previous to 3.10, you must also include - atomic-openshift-utils
 yum_packages:
   - iptables-services
   - bridge-utils
@@ -19,9 +20,9 @@ yum_packages:
   - sos
   - psacct
   - atomic
-  - atomic-openshift-utils
   - docker-1.13.1
+  - openshift-ansible
 
-# Tower pip packages
+# pip packages
 pip_packages: []
 ...
