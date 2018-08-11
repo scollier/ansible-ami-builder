@@ -7,7 +7,7 @@ disable_rhui: False
 yum_repos:
   - rh-gluster-3-for-rhel-7-server-rpms 
 
-# Tower yum packages
+# yum packages
 yum_packages:
   - iptables-services
   - bridge-utils
@@ -17,6 +17,6 @@ yum_packages:
   - httpd
   - python2-passlib
 
-# Tower pip packages
+# pip packages
 pip_packages: []
 ...
