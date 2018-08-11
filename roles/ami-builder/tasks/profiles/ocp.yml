@@ -1,5 +1,5 @@
 ---
-- name: Capture the instance ID of "{{ ami_config }}"
+- name: Capture the instance ID of "{{ ami_build_type }}"
   local_action:
     module: ec2_instance_facts
     aws_access_key: "{{ ec2_access_key }}"
