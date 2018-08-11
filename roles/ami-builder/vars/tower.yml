@@ -11,9 +11,6 @@ tower_password: "{{ tower_password }}"
 tower_cli_verbosity: "--verbose"
 tower_org: "Default"
 
-tower_version: "{{ tower_version }}"
-ocp_version: "{{ ocp_version }}"
-
 # Tower setup archive
 tower_setup_archive: https://releases.ansible.com/ansible-tower/setup/ansible-tower-setup-{{ tower_version }}.tar.gz
 
