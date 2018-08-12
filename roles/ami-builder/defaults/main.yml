@@ -9,9 +9,8 @@ tower_version: "3.2.5"
 ocp_version: "3.10"
 # Docker version
 docker_version: "1.13.1"
-
 # Ansible variable for version cannot use 'ansible_version' as this conflicts with one of Ansible's core variables
-ansible_rpm_version: "2.5"
+ansible_rpm_version: "2.4"
 
 # EPEL
 epel_setup: False
