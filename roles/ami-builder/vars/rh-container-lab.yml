@@ -4,8 +4,6 @@ epel_setup: True
 ami_create: True
 disable_rhui: True
 
-ocp_version: "{{ ocp_version }}"
-
 yum_repos:
   - rhel-7-server-ose-{{ ocp_version }}-rpms
 
