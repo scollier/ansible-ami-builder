@@ -1,20 +1,20 @@
 ---
 - name: Load profile variables for 'ocp'
   include_vars: ../vars/ocp.yml
-  when: ami_config == "ocp"
+  when: ami_build_type == "ocp"
 
 - name: Load profile variables for 'http'
   include_vars: ../vars/http.yml
-  when: ami_config == "http"
+  when: ami_build_type == "http"
 
 - include_vars: ../vars/tower.yml
-  when: ami_config == "tower"
+  when: ami_build_type == "tower"
 
 - name: Load profile variables for 'rh-container-lab'
   include_vars: ../vars/rh-container-lab.yml
-  when: ami_config == "rh-container-lab"
+  when: ami_build_type == "rh-container-lab"
 
 - name: Load profile variables for 'ansible_host'
   include_vars: ../vars/ansible_host.yml
-  when: ami_config == "ansible_host"
+  when: ami_build_type == "ansible_host"
 ...

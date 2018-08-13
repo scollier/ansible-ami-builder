@@ -4,12 +4,10 @@ epel_setup: False
 ami_create: True
 disable_rhui: True
 
-ocp_version: 3.10
-
 yum_repos:
   - rhel-7-server-ose-{{ ocp_version }}-rpms
   - rhel-7-fast-datapath-rpms
-  - rhel-7-server-ansible-2.4-rpms
+  - rhel-7-server-ansible-{{ ansible_rpm_version }}-rpms
 
 # yum packages
 ## NOTE: For version previous to 3.10, you must also include - atomic-openshift-utils
@@ -20,7 +18,7 @@ yum_packages:
   - sos
   - psacct
   - atomic
-  - docker-1.13.1
+  - docker-{{ docker_version }}
   - openshift-ansible
 
 # pip packages

@@ -1,10 +1,10 @@
 ---
-- name: Create a file on the "{{ ami_config }}" AMI for later inspection
+- name: Create a file on the "{{ ami_build_type }}" AMI for later inspection
   file:
-    path: /tmp/{{ ami_config }}-profile-configured-by-ansible-ami-builder
+    path: /tmp/{{ ami_build_type }}-profile-configured-by-ansible-ami-builder
     state: touch
 
-- name: Capture the instance ID of this "{{ ami_config }}"
+- name: Capture the instance ID of this "{{ ami_build_type }}"
   local_action:
     module: ec2_instance_facts
     aws_access_key: "{{ ec2_access_key }}"
@@ -27,7 +27,7 @@
   become: True
   when: subscription_manager_unregister | default(False) | bool == True
 
-- name: Create an AMI from the "{{ ami_config }}" VM
+- name: Create an AMI from the "{{ ami_build_type }}" VM
   local_action:
     module: ec2_ami
     aws_access_key: "{{ ec2_access_key }}"

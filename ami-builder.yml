@@ -1,5 +1,5 @@
 ---
-- name: Include ami_config role
+- name: Include ami_build_type role
   hosts: instance
   #strategy: debug
   become: true
@@ -9,5 +9,5 @@
   vars_files:
     - aws_vars.yml
   roles:
-    - { role: ami_config, when: ami_config is defined }
+    - { role: ami-builder, when: ami_build_type is defined }
 ...

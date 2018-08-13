@@ -6,12 +6,12 @@
   vars_files:
     - aws_vars.yml
   pre_tasks:
-  - name: Check if 'ami_config' is defined
+  - name: Check if 'ami_build_type' is defined
     fail:
-      msg: "ERROR! The variable 'ami_config' must be defined!"
-    when: not ami_config is defined
+      msg: "ERROR! The variable 'ami_build_type' must be defined!"
+    when: not ami_build_type is defined
   tasks:
-  - name: Provision AMI instance on AWS for "{{ ami_config }}"
+  - name: Provision AMI instance on AWS for "{{ ami_build_type }}"
     ec2:
       aws_access_key: "{{ ec2_access_key }}"
       aws_secret_key: "{{ ec2_secret_key }}"
@@ -23,7 +23,7 @@
       instance_tags:
         Name: "ami-{{ ami_user }}-{{ ami_name }}.{{ domain_name }}"
         ami_user: "{{ ami_user }}"
-        ami_config: "{{ ami_config }}"
+        ami_build_type: "{{ ami_build_type }}"
         student_id: "{{ ami_user }}-ami"
       vpc_subnet_id: "{{ aws_subnet_id }}"
       zone: "{{ aws_az_1 }}"
@@ -94,6 +94,6 @@
       retries: 60
       delay: 5
 
-- import_playbook: ami_config.yml
-  when: ami_config is defined
+- import_playbook: ami-builder.yml
+  when: ami_build_type is defined
 ...
