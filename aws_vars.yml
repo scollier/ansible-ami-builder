@@ -1,6 +1,6 @@
 ---
 # Default names of the AMIs that we create
-ami_name: "{{ ami_build_type + '-' + ami_unique_id }}"
+ami_name: "{{ ami_build_type + '-' + (ami_unique_id | string) }}"
 
 # Set the default AMI root disk size
 ami_root_disk_size: 25
